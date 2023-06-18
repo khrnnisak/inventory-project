@@ -17,23 +17,26 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::resource('products',ProuductController::class);
 
 // Public routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/products', [ProuductController::class, 'index']);
-Route::get('/products/{id}', [ProuductController::class, 'show']);
-Route::get('/products/search/{name}', [ProuductController::class, 'search']);
+// Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/login', [AuthController::class, 'login']);
+// Route::get('/products/', [ProuductController::class, 'index']);
+// Route::get('/products/{kode_barang}', [ProuductController::class, 'show']);
+// Route::get('/products/search/{name}', [ProuductController::class, 'search']);
+// Route::post('/products/add', [ProuductController::class, 'store']);
+// Route::get('/products/edit/{id}', [ProuductController::class, 'update']);
+// Route::delete('/products/delete/{id}', [ProuductController::class, 'destroy']);
+// Route::post('/logout', [AuthController::class, 'logout']);
 
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/products/add', [ProuductController::class, 'store']);
-    Route::put('/products/{id}', [ProuductController::class, 'update']);
-    Route::delete('/products/{id}', [ProuductController::class, 'destroy']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    
+    
 });
 

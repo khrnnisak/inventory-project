@@ -12,7 +12,7 @@ class ProuductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        return response()->json(Product::get());
     }
 
     /**
@@ -30,11 +30,13 @@ class ProuductController extends Controller
     {
         $request->validate([
             'nama_barang' => 'required',
+            'deskripsi' => 'nullable',
             'harga' => 'required',
             'stok' => 'required'
         ]);
 
-        return Product::create($request->all());
+        Product::create($request->all());
+        return response()->json('succesfully added');
     }
 
     /**
@@ -42,7 +44,7 @@ class ProuductController extends Controller
      */
     public function show($id)
     {
-        return Product::find($id);
+        return response()->json(Product::whereId($id));
     }
 
     /**
@@ -50,7 +52,7 @@ class ProuductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return response()->json(Product::whereId($id)->first());
     }
 
     /**
@@ -58,18 +60,21 @@ class ProuductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Product::find($id);
-        $product->update($request->all());
-        return $product;
+        $products = Product::whereId($id)->first();
+
+        $products->update([
+            'nama_barang'=>$request->nama_barang,
+            'deskripsi'=>$request->deskripsi,
+            'harga'=>$request->harga,
+            'stok'=>$request->stok,
+        ]);
+        return response()->json('successfully updated');
     }
     public function destroy(string $id)
     {
-        $result = Product::destroy($id);
-        if ($result) {
-            return ["result" => "Product has been deleted"];
-        } else {
-            return ["result" => "Operation failed"];
-        }
+        Product::whereId($id)->first()->delete();
+
+        return response()->json('success');
     }
 
     public function search($key){
